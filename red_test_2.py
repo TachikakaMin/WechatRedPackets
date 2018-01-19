@@ -51,9 +51,9 @@ if __name__ == '__main__':
             tmp[j] = data[j, i]
         varPosition[i] = np.var(tmp)
     avgExample = avgExample/30.0
-    # plt.bar([i for i in range(1, 21)], avgExample)
+    plt.bar([i for i in range(1, 21)], avgExample)
     # plt.bar([i for i in range(1, 31)], varExample)
-    plt.bar([i for i in range(1, 21)], varPosition)
+    # plt.bar([i for i in range(1, 21)], varPosition)
     plt.show()
     # print(varExample)
     # print(varPosition)

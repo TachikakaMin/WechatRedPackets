@@ -42,8 +42,24 @@ if __name__ == '__main__':
     varExample = np.zeros(30)
     avgExample = np.zeros(20)
     varPosition = np.zeros(20)
+    max1 = 35
+    pdfAvg = np.zeros(max1)
+    cdf = np.zeros(max1)
+    cdfAvg = np.zeros(max1)
     for i in range(30):
         data[i] = dp(getRedEnvelope(5.0, 20))/5.0
+        pdf = np.zeros(max1)
+        for j in range(20):
+            t = int(data[i, j]*100)
+            pdf[t] = pdf[t]+1
+        for j in range(max1):
+            if (j == 0):
+                cdf[j] = pdf[0]
+            if (j > 0):
+                cdf[j] = cdf[j-1]+pdf[j]
+        cdf = cdf/20
+        pdfAvg = pdfAvg+pdf
+        cdfAvg = cdfAvg+cdf
         avgExample = avgExample+data[i]
         varExample[i] = np.var(data[i])
     for i in range(20):
@@ -52,10 +68,22 @@ if __name__ == '__main__':
             tmp[j] = data[j, i]
         varPosition[i] = np.var(tmp)
     avgExample = avgExample/30.0
+    cdfAvg = cdfAvg/max1
+    pdfAvg = pdfAvg/max1
+    plt.bar([i for i in range(max1)], cdfAvg)
+    p = np.polyfit([i for i in range(max1)], cdfAvg, 7)
+    y2 = np.polyval(p, [i for i in range(max1)])
+    plt.plot([i for i in range(max1)], cdfAvg,
+             'o', [i for i in range(max1)], y2)
+    # plt.bar([i for i in range(max1)], pdfAvg)
+    # p = np.polyfit([i for i in range(max1)], pdfAvg, 7)
+    # y2 = np.polyval(p, [i for i in range(max1)])
+    # plt.plot([i for i in range(max1)], pdfAvg,
+    #          'o', [i for i in range(max1)], y2)
     #plt.bar([i for i in range(1, 21)], avgExample)
     # plt.bar([i for i in range(1, 31)], varExample)
-    plt.bar([i for i in range(1, 21)], varPosition)
+    # plt.bar([i for i in range(1, 21)], varPosition)
     plt.show()
     # print(varExample)
     # print(varPosition)
-    print(avgExample)
+    # print(avgExample)
